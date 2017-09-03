@@ -1,15 +1,17 @@
-import { Component, Output, EventEmitter } from '@angular/core'
+import { Component, Output, EventEmitter, Input } from '@angular/core'
 
 @Component({
   selector: 'app-input',
   template: `
     <form (submit)="handleSubmit($event)">
       <input
+        autofocus
         [value]="todoText"
         (input)="todoText=$event.target.value"
-        (keyup.esc)="todoText=''"
+        (blur)="handleCancelEdit()"
+        (keyup.esc)="$event.target.blur()"
       >
-      <button class="btn" type="submit">Add Todo</button>
+      <button [hidden]="editMode" class="btn" type="submit">Add Todo</button>
     </form>
   `,
   styles: [
@@ -34,10 +36,16 @@ import { Component, Output, EventEmitter } from '@angular/core'
     }
     `,
   ],
+  // tslint:disable-next-line:use-host-property-decorator
+  host: {
+    tabindex: '0',
+  },
 })
 export class InputComponent {
+  @Input() todoText = ''
+  @Input() editMode = false
   @Output() addTodo = new EventEmitter<string>()
-  todoText = ''
+  @Output() cancel = new EventEmitter<void>()
 
   createTodoText(todoText: string) {
     this.addTodo.emit(todoText)
@@ -46,5 +54,8 @@ export class InputComponent {
   handleSubmit(event: KeyboardEvent) {
     event.preventDefault()
     this.createTodoText(this.todoText)
+  }
+  handleCancelEdit() {
+    this.cancel.emit()
   }
 }

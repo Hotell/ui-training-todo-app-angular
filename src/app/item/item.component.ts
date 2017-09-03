@@ -1,10 +1,25 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core'
 import { Todo } from '../models'
 
+export type ChangeTodoTitleEvent = { oldTodo: Todo; newTodo: Todo }
+
 @Component({
   selector: 'app-item',
   template: `
-    <span class="todo-title">{{todo.title}}</span>
+    <span
+      class="todo-title"
+      [hidden]="editing"
+      (click)="editItem()"
+    >
+      {{todo.title}}
+    </span>
+    <app-input
+      [editMode]="true"
+      [hidden]="!editing"
+      [todoText]="todo.title"
+      (addTodo)="changeItemTitle($event)"
+      (cancel)="cancelEdit()"
+    ></app-input>
     <button class="btn" (click)="removeItem()">
       remove
     </button>
@@ -35,8 +50,26 @@ import { Todo } from '../models'
 export class ItemComponent {
   @Input() todo: Todo
   @Output() remove = new EventEmitter<Todo>()
+  @Output() changeTitle = new EventEmitter<ChangeTodoTitleEvent>()
+
+  editing = false
+
+  editItem(todoInpunt: HTMLElement) {
+    this.editing = true
+  }
+  cancelEdit() {
+    this.editing = false
+  }
 
   removeItem() {
     this.remove.emit(this.todo)
+  }
+
+  changeItemTitle(newTitle: string) {
+    this.editing = false
+    this.changeTitle.emit({
+      oldTodo: this.todo,
+      newTodo: { title: newTitle },
+    })
   }
 }
