@@ -1,7 +1,14 @@
 {
-  "name": "todo-app",
-  "version": "0.0.0",
+  "name": "ui-training-todo-app-angular",
+  "version": "1.0.0",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/Hotell/ui-training-todo-app-angular.git"
+  },
+  "author": {
+    "name": "Martin Hochel",
+    "email": "hochelmartin@gmail.com"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
