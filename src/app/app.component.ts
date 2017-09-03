@@ -1,4 +1,5 @@
-import { Component } from '@angular/core'
+import { TodoListService } from './todo-list.service'
+import { Component, OnInit } from '@angular/core'
 import { Todo } from './models'
 import { ChangeTodoTitleEvent } from './item/item.component'
 
@@ -10,7 +11,7 @@ import { ChangeTodoTitleEvent } from './item/item.component'
     </h1>
     <app-input (addTodo)="handleTodoAdd($event)"></app-input>
     <ul>
-      <li *ngFor="let todo of todoList">
+      <li *ngFor="let todo of todoItems">
         <app-item [todo]="todo" (remove)="handleTodoRemoval($event)"  (changeTitle)="handleTodoChange($event)"></app-item>
       </li>
     </ul>
@@ -73,30 +74,23 @@ import { ChangeTodoTitleEvent } from './item/item.component'
   `,
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'My Todos'
-  todoList = [
-    { title: 'install NodeJS' },
-    { title: 'install Angular CLI' },
-    { title: 'create new app' },
-    { title: 'serve app' },
-    { title: 'develop app' },
-    { title: 'deploy app' },
-  ]
+
+  todoItems: ReadonlyArray<Todo>
+  constructor(private todoList: TodoListService) {}
+
+  ngOnInit() {
+    this.todoItems = this.todoList.getTodoList()
+  }
 
   handleTodoAdd(todoText: string) {
-    const newTodoItem = {
-      title: todoText,
-    }
-    const newTodoList = [...this.todoList, newTodoItem]
-    this.todoList = newTodoList
+    this.todoItems = this.todoList.addItem(todoText)
   }
   handleTodoRemoval(todo: Todo) {
-    this.todoList = this.todoList.filter(todoItem => todoItem !== todo)
+    this.todoItems = this.todoList.removeItem(todo)
   }
-  handleTodoChange({ oldTodo, newTodo }: ChangeTodoTitleEvent) {
-    const idx = this.todoList.findIndex(todoItem => todoItem === oldTodo)
-    const newTodoList = [...this.todoList.slice(0, idx), newTodo, ...this.todoList.slice(idx + 1)]
-    this.todoList = newTodoList
+  handleTodoChange(args: ChangeTodoTitleEvent) {
+    this.todoItems = this.todoList.changeItem(args)
   }
 }
