@@ -24,7 +24,10 @@ import { Component, Output, EventEmitter } from '@angular/core'
       flex-grow: 1;
     }
 
-    :host(:not([hidden])) {
+    :host(:not([hidden])){
+      display: block;
+    }
+    :host form {
       display: flex;
       justify-content: space-between;
       flex-grow: 1;

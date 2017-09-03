@@ -1,8 +1,5 @@
 import { Component } from '@angular/core'
-
-interface Todo {
-  title: string
-}
+import { Todo } from './models'
 
 @Component({
   selector: 'app-root',
@@ -13,8 +10,7 @@ interface Todo {
     <app-input (addTodo)="handleTodoAdd($event)"></app-input>
     <ul>
       <li *ngFor="let todo of todoList">
-        {{todo.title}}
-        <button (click)="removeTodo(todo)">X</button>
+        <app-item [todo]="todo" (remove)="handleTodoRemoval(todo)"></app-item>
       </li>
     </ul>
   `,
@@ -94,7 +90,7 @@ export class AppComponent {
     const newTodoList = [...this.todoList, newTodoItem]
     this.todoList = newTodoList
   }
-  removeTodo(todo: Todo) {
+  handleTodoRemoval(todo: Todo) {
     this.todoList = this.todoList.filter(todoItem => todoItem !== todo)
   }
 }
