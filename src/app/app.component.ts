@@ -1,5 +1,6 @@
 import { Component } from '@angular/core'
 import { Todo } from './models'
+import { ChangeTodoTitleEvent } from './item/item.component'
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { Todo } from './models'
     <app-input (addTodo)="handleTodoAdd($event)"></app-input>
     <ul>
       <li *ngFor="let todo of todoList">
-        <app-item [todo]="todo" (remove)="handleTodoRemoval(todo)"></app-item>
+        <app-item [todo]="todo" (remove)="handleTodoRemoval($event)"  (changeTitle)="handleTodoChange($event)"></app-item>
       </li>
     </ul>
   `,
@@ -92,5 +93,10 @@ export class AppComponent {
   }
   handleTodoRemoval(todo: Todo) {
     this.todoList = this.todoList.filter(todoItem => todoItem !== todo)
+  }
+  handleTodoChange({ oldTodo, newTodo }: ChangeTodoTitleEvent) {
+    const idx = this.todoList.findIndex(todoItem => todoItem === oldTodo)
+    const newTodoList = [...this.todoList.slice(0, idx), newTodo, ...this.todoList.slice(idx + 1)]
+    this.todoList = newTodoList
   }
 }
