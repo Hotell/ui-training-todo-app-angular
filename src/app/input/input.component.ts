@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
+import { Component, Output, EventEmitter, Input, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-input',
@@ -40,6 +40,7 @@ import { Component, Output, EventEmitter, Input, AfterViewInit, ViewChild, Eleme
   host: {
     tabindex: '0',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements AfterViewInit {
   @Input() todoText = ''
