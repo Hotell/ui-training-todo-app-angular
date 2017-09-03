@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, ChangeDetectionStrategy } from '@angular/core'
+import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy } from '@angular/core'
 import { Todo } from '../models'
 
 export type ChangeTodoTitleEvent = { oldTodo: Todo; newTodo: Todo }
