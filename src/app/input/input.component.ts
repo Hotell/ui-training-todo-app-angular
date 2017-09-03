@@ -1,11 +1,11 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core'
+import { Component, Output, EventEmitter, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core'
 
 @Component({
   selector: 'app-input',
   template: `
     <form (submit)="handleSubmit($event)">
       <input
-        autofocus
+        #inputElement
         [value]="todoText"
         (input)="todoText=$event.target.value"
         (blur)="handleCancelEdit()"
@@ -41,11 +41,17 @@ import { Component, Output, EventEmitter, Input } from '@angular/core'
     tabindex: '0',
   },
 })
-export class InputComponent {
+export class InputComponent implements AfterViewInit {
   @Input() todoText = ''
   @Input() editMode = false
   @Output() addTodo = new EventEmitter<string>()
   @Output() cancel = new EventEmitter<void>()
+
+  @ViewChild('inputElement') private inputElement: ElementRef
+
+  ngAfterViewInit() {
+    this.inputElement.nativeElement.focus()
+  }
 
   createTodoText(todoText: string) {
     this.addTodo.emit(todoText)
