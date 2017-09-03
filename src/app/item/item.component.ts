@@ -14,8 +14,8 @@ export type ChangeTodoTitleEvent = { oldTodo: Todo; newTodo: Todo }
       {{todo.title}}
     </span>
     <app-input
+      *ngIf="editing"
       [editMode]="true"
-      [hidden]="!editing"
       [todoText]="todo.title"
       (addTodo)="changeItemTitle($event)"
       (cancel)="cancelEdit()"
